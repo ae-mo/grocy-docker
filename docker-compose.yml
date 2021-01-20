@@ -1,9 +1,17 @@
-version: '2.4'
+version: "2.4"
+
+networks:
+  web:
+    external: true
 
 services:
-
-  nginx:
+  grocy_nginx:
     image: "grocy/nginx:${GROCY_IMAGE_TAG:-latest}"
+    labels:
+      - traefik.backend=grocy_nginx
+      - traefik.frontend.rule=Host:grocy.aemo.dev
+      - traefik.docker.network=web
+      - traefik.port=80
     build:
       args:
         GROCY_VERSION: v3.0.1
@@ -12,8 +20,10 @@ services:
     depends_on:
       - grocy
     ports:
-      - '127.0.0.1:80:8080'
-      - '127.0.0.1:443:8443'
+      - "127.0.0.1:80:8080"
+      - "127.0.0.1:443:8443"
+    networks:
+      - web
     read_only: true
     tmpfs:
       - /tmp
@@ -29,7 +39,7 @@ services:
       context: .
       dockerfile: Dockerfile-grocy
     expose:
-      - '9000'
+      - "9000"
     read_only: true
     tmpfs:
       - /tmp
