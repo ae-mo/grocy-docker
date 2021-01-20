@@ -5,10 +5,10 @@ networks:
     external: true
 
 services:
-  grocy-nginx:
+  nginx:
     image: "grocy/nginx:${GROCY_IMAGE_TAG:-latest}"
     labels:
-      - traefik.backend=grocy-nginx
+      - traefik.backend=nginx
       - traefik.frontend.rule=Host:grocy.aemo.dev
       - traefik.docker.network=web
       - traefik.port=8080
@@ -27,7 +27,6 @@ services:
     volumes:
       - /var/log/nginx
     container_name: nginx
-
   grocy:
     image: "grocy/grocy:${GROCY_IMAGE_TAG:-latest}"
     build:
