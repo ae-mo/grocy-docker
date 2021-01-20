@@ -3,6 +3,9 @@ version: "2.4"
 networks:
   web:
     external: true
+  grocy:
+    internal: true
+    driver: bridge
 
 services:
   nginx:
@@ -21,6 +24,7 @@ services:
       - grocy
     networks:
       - web
+      - grocy
     read_only: true
     tmpfs:
       - /tmp
@@ -34,6 +38,8 @@ services:
         GROCY_VERSION: v3.0.1
       context: .
       dockerfile: Dockerfile-grocy
+    networks:
+      - grocy
     expose:
       - "9000"
     read_only: true
